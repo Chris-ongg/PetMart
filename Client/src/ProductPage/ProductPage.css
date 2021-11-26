@@ -1,0 +1,51 @@
+.productPage {
+    position: relative;
+}
+
+.productPage .productListingTitle {
+    font-family: 'EB Garamond', serif;
+    font-size: 50px;
+    border-bottom: 1px solid #e7e7e7;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+.productPage .productListing {
+    margin: 200px auto 0px auto;
+    width: 95%;
+}
+
+.productPage .productListing .showProducts {
+    font-family: 'EB Garamond', serif;
+    font-size: 17px;
+    letter-spacing: 1px;
+    color: #000;
+    font-weight: 600;
+}
+
+.productPage .productListing .showProducts .row {
+    margin: 20px 0 40px 0;
+}
+
+.productPage .productListing .showProducts .row .card {
+    width: 130%;
+    border: none;
+    text-align: center;
+}
+
+.productPage .productListing .showProducts .row .card .foodImage {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.productPage .productListing .showProducts .row .card .soldOutCardText {
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+    color: #888 !important;
+    margin-bottom: 3px;
+    font-weight: 400;
+}

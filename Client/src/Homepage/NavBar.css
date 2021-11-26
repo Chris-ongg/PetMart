@@ -1,0 +1,25 @@
+.NavBarWrapper {
+    width: 80%;
+    background-color: #292c2f;
+}
+
+.navbar-brand {
+    font-family: 'Freehand', cursive;
+    font-weight: 1000;
+    font-size: 2.5rem !important;
+    color: white !important;
+}
+
+.link a {
+    color: white;
+    font-family: 'Libre Baskerville', serif;
+    text-decoration: none ;
+    padding: 5px 15px;
+    font-weight: 500;
+}
+
+.link svg {
+    color: white;
+}
+
+

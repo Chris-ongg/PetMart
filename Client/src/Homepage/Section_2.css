@@ -1,0 +1,58 @@
+
+.Section2 {
+    background-image:  url('../Images/section_2_pic_2.png');
+    background-repeat: no-repeat;
+    background-position: -50px 150px;
+    overflow: hidden;
+    width: 90%;
+    margin: 5% auto 0% auto;
+}
+
+
+.MissionTitle {
+    font-family: 'Freehand', cursive;
+    color: #406343;
+    font-size: 3rem;
+    font-weight: 550;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+
+.ValuesTitle {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.2rem;
+    color: #5F7A61;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-top: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.Section2 .row {
+    margin-top: 15px;
+}
+
+.InnerContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.CoreValues {
+    position: absolute;
+    font-family: 'Libre Baskerville', serif;
+    left: 12%;
+    font-family: 'Freehand', cursive;
+    color: #5F7A61;
+    font-size: 2rem;
+}
+
+.ValuesImage1 {
+    float: left;
+    padding-right: 10px;
+    mix-blend-mode: multiply;
+}

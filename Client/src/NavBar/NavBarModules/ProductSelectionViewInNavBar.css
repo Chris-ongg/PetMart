@@ -1,0 +1,64 @@
+
+
+
+
+.navBar .navBarHeader .left .innerContainer {
+    display: none;
+    flex-direction: row;
+    width: 100%;
+    white-space: nowrap;
+    padding-left: 10px;
+}
+
+.navBar .navBarHeader .left .innerContainer:hover .dropdown-content{
+    display: block;
+}
+
+.navBar .navBarHeader .left .innerContainer .dropdown-content {
+    position: absolute;
+    top: 30px;
+    display: none;
+    height: 200px;
+    width: 100%;
+    background-color: transparent;
+    z-index: 2;
+}
+
+.navBar .navBarHeader .left .innerContainer .dropdown-content .dropdown-content-inner {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background-color: white;
+    margin-top: 60px;
+}
+
+.navBar .navBarHeader .left .innerContainer .dropdown-content .dropdown-content-inner button:hover {
+    text-decoration: underline;
+}
+
+
+.navBar .navBarHeader .left .innerContainer .dropdown-content .dropdown-content-inner .selection {
+    display: flex;
+    flex-direction: column;
+    font-family: 'EB Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 15px;
+    padding-left: 15px;
+    width: 200px;
+}
+
+.navBar .navBarHeader .left .innerContainer .dropdown-content .dropdown-content-inner .selection button{
+    text-align: left;
+}
+
+.navBar .navBarHeader .left .innerContainer .dropdown-content .dropdown-content-inner .selection .titleButton{
+    font-size: 17px;
+    font-weight: 600;
+}
+
+@media only screen and (min-width: 800px) {
+    .navBar .navBarHeader .left .innerContainer {
+        display: flex !important;
+    }
+}

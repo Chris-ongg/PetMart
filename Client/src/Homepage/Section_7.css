@@ -1,0 +1,64 @@
+.section7{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    margin-top:5%;
+    background-color: #CAF7E3;
+    padding-top: 2.5%;
+    padding-bottom:2.5%;
+}
+
+.section7 h2 {
+    margin-bottom: 3%;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
+
+
+.contentArea{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.contentArea h3 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1rem;
+    font-weight:600;
+    text-align: center;
+    margin-bottom: 4%;
+}
+
+.contentArea form , .contentArea .contactInfo{
+    width: 100%;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+.contactInfo  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contactInfo p {
+    margin-top: 2%;
+    margin-bottom: 0px;
+}
+
+.contactInfo img {
+    width: 400px;
+    height: 250px;
+}
+
+
+@media screen and (max-width: 720px) {
+    .contentArea{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+   
+}

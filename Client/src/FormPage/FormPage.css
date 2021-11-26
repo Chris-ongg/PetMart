@@ -1,0 +1,38 @@
+.formPage {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 0;
+}
+
+.formPage .petRegistrationForm {
+    width: 90%;
+    margin: 0 auto 0 auto;
+}
+
+.formPage .petRegistrationForm h1 {
+    text-align: center;
+    font-family: 'EBGaramond',serif;
+    margin-bottom: 40px;
+}
+
+.formPage .petRegistrationForm .buttonRow {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.formPage .petRegistrationForm .buttonRow button {
+    font-family: 'EBGaramond',serif;
+    background-color: black;
+    color: white;
+    border: none;
+    font-size: 18px;
+    padding:15px 15px;
+    width: 25%;
+    margin-top: 20px;
+}
+

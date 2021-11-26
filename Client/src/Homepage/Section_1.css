@@ -1,0 +1,50 @@
+.Section1 {
+    background-image: url('../Images/section_1_pic_1.jpg');
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-position: 0px -70px;
+    height: calc(100vw - 33vw);
+}
+
+
+@media screen and (min-width:  1800px) {
+    .Section1 {
+        height: 1200px
+    }
+}
+
+.Section1 .navBar .navBarHeader {
+    border-bottom: none;
+    color: white;
+}
+
+.Section1 .navBar .navBarHeader button {
+    color: white;
+}
+
+.Section1 .navBar .navBarHeader .left .innerContainer .dropdown-content .dropdown-content-inner {
+    background-color: transparent;
+    color: white;
+}
+
+.Section1 .navBar .navBarHeader:hover {
+    background-color: white;
+    opacity: 0.9;
+    color: black;
+}
+
+.Section1 .navBar .navBarHeader:hover button {
+    color: black;
+}
+
+.Section1 .navBar .navBarHeader:hover .left .innerContainer .dropdown-content .dropdown-content-inner {
+    background-color: transparent;
+    color: white;
+}
+
+.Section1 .navBar .navBarHeader:hover .left .innerContainer .dropdown-content .dropdown-content-inner button{
+    color: white;
+}

@@ -1,0 +1,113 @@
+.sideNavbar-enter {
+    width: 0px;
+    left: 0px;
+}
+
+.sideNavbar-enter-active {
+    width: 100%;
+    transition: width 1000ms
+}
+
+.sideNavbar-exit {
+    width: 100%;
+}
+
+.sideNavbar-exit-active {
+    width: 0;
+    transition: all 500ms;
+}
+
+.navBar .productSelectionView {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    min-height: 100vh;
+    left: 0px;
+    background-color: white;
+    z-index: 3;
+    text-align: left;
+}
+
+.navBar .productSelectionView .closeView {
+    background-color: transparent;
+    border: none;
+    text-align: end;
+    width: 50px;
+    margin: 20px 20px 20px auto;
+    color: black;
+}
+
+.navBar .productSelectionView .selectionTitle {
+    display: flex;
+    flex-direction: column;
+    font-family: 'EB Garamond', serif;
+    font-size: 23px;
+    color: #000;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #e7e7e7;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-weight: 700;
+    align-items: center;
+}
+
+.navBar .productSelectionView .selectionTitle .innerContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.navBar .productSelectionView .selectionTitle .innerContainer span{
+    padding-left: 20px;
+}
+
+.navBar .productSelectionView .selectionTitle .innerContainer p{
+    padding-left: 20px;
+    font-size: 15px;
+    font-style: italic;
+    color: #818080;
+    margin-bottom: 0;
+    font-weight: 400;
+
+}
+
+.navBar .productSelectionView .selectionTitle .innerContainer .icon {
+    vertical-align: middle;
+    margin: auto 20px auto auto;
+}
+
+.navBar .productSelectionView .selectionTitle .innerContainer button {
+    font-family: 'EB Garamond', serif;
+    background-color: transparent;
+    border: none;
+    font-size: 23px;
+    padding-left: 20px;
+    font-weight: 600;
+    color: black
+}
+
+.navBar .productSelectionView .selectionTitle .selectionChoices {
+    flex-direction: column;
+    margin-right: auto;
+    padding-left: 100px;
+    padding-top:20px;
+
+}
+
+.navBar .productSelectionView .selectionTitle .selectionChoices button {
+    font-family: 'EB Garamond', serif;
+    background-color: transparent;
+    border: none;
+    font-size: 19px;
+    font-weight: 550;
+    text-align: left;
+    color: black;
+}
+
+@media only screen and (max-width: 800px) {
+    .navBar .navBarHeader .left .icon {
+        display: block !important;
+    }
+}

@@ -1,0 +1,99 @@
+.menu-enter {
+    width: 0px;
+    right: 0px;
+}
+
+.menu-enter-active {
+    width: 400px;
+    transition: width 300ms
+}
+
+.menu-enter-done {
+    width: 400px;
+}
+
+.menu-exit {
+    width: 400px;
+}
+
+.menu-exit-active {
+    transform: translateX(400px);
+    transition: all 500ms
+}
+
+
+ .shoppingCart {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+
+    min-height: 100vh;
+    right: 0px;
+    background-color: white;
+    z-index: 2;
+    text-align: center;
+}
+
+ .shoppingCart .closeView {
+    background-color: transparent;
+    border: none;
+    text-align: end;
+    width: 50px;
+    margin: 20px 20px 20px auto;
+    color: black;
+
+}
+
+.shoppingCart .title {
+    font-size: 30px;
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+    padding-left: 0;
+}
+
+.shoppingCart .cart-price-items {
+    display: block;
+    font-family: 'EB Garamond', serif;
+    font-size: 22px;
+    border-bottom: 1px solid #e7e7e7;
+    padding: 0 0 10px 0;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.shoppingCart .cart-block-items {
+    display: flex;
+    flex-direction: row;
+    width:100%;
+    border-bottom: 1px solid #e7e7e7;
+    justify-content: center;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.shoppingCart .cart-block-items .cart-block-items-left {
+    display: flex;
+    flex-direction: column;
+    font-family: 'EB Garamond', serif;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+ .shoppingCart .cart-block-items .cart-block-items-left button {
+    font-family: 'EB Garamond', serif;
+    background-color: transparent;
+    border: none;
+    color: #888;
+    font-style: italic;
+    text-align: left;
+    padding-left: 0;
+    padding-top: 20px;
+    font-size: 18px;
+}
+
+
+.shoppingCart .cart-block-items img {
+    width: 150px;
+}

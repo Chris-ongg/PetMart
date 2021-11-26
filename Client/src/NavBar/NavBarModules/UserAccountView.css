@@ -1,0 +1,163 @@
+.loginNavBar-enter {
+    width: 0px;
+    right: 0px;
+}
+
+.loginNavBar-enter-active {
+    width: 450px;
+    transition: width 300ms
+}
+
+.loginNavBar-enter-done {
+    width: 450px;
+}
+
+.loginNavBar-exit {
+    width: 450px;
+}
+
+.loginNavBar-exit-active {
+    transform: translateX(450px);
+    transition: all 500ms
+}
+
+ .userAccount {
+    font-family: 'EB Garamond', serif;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    right: 0px;
+    background-color: white;
+    z-index:4;
+}
+
+ .userAccount .closeView{
+    background-color: transparent;
+    border: none;
+    text-align: end;
+    width: 50px;
+    margin: 20px 20px 0px auto;
+    padding-top:0px;
+    color: black;
+}
+
+.userAccount .title {
+    font-size: 29px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    padding-left: 0;
+}
+
+.userAccount p {
+    font-size: 16px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+ .userAccount button {
+    font-family: 'EB Garamond', serif;
+    color: white;
+    background-color: black;
+    border: none;
+    width: 100%;
+    padding: 9px 0 12px 0;
+    font-size:21px;
+    letter-spacing: 1px;
+    margin: 30px 0 10px 0;
+}
+
+.userAccount .loginForm {
+    width: 88%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+
+
+.userAccount .loginForm .googleLogin {
+    font-family: 'EB Garamond', serif !important;
+    background-color: black !important;
+    color: white !important;
+    font-size: 21px !important;
+    justify-content: center;
+    margin-top: 10px !important;
+}
+
+ .userAccount .line {
+    border: 1px solid #e7e7e7;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+ .userAccount .innerContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+}
+
+ .userAccount .innerContainer .registerOrSignInAccount {
+    width: 88%;
+}
+
+.userAccount .innerContainer .registerOrSignInAccount button {
+    margin-top: 5px;
+}
+
+.userAccount .innerContainer .messageError {
+    font-family: 'EB Garamond', serif;
+    display: flex;
+    flex-direction: row;
+    color: #C94135;
+    border: 1px solid #ED5565;
+    justify-content: center;
+    background-color: #f5dddb ;
+    width: 88%;
+    height: 35px;
+    margin-bottom: 10px;
+}
+
+ .userAccount .innerContainer .messageError .icon {
+    margin: auto 0 auto 0 ;
+    vertical-align: middle;
+}
+
+ .userAccount .innerContainer .messageError span {
+    margin: auto 0 auto 0;
+    padding-left: 10px;
+}
+
+.userAccount .innerContainer .customerDetails {
+    border-bottom: 1px solid #e7e7e7;
+    padding: 10px 0 15px 0;
+    width: 100%;
+}
+
+ .userAccount .innerContainer .customerDetails p {
+    margin: 5px 0 5px 0;
+}
+
+ .userAccount .innerContainer .customerDetails span {
+    font-style: italic;
+    color: #888;
+}
+
+.userAccount .innerContainer .selection {
+    border-bottom: 1px solid #e7e7e7;
+    width: 100%
+}
+
+ .userAccount .innerContainer .selection button{
+    background-color: transparent;
+    font-family: 'EB Garamond', serif;
+    color: black;
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 10px;
+    padding: 0 0 0 25px;
+    text-align: left;
+}

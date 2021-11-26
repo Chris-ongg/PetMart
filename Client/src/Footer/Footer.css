@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
+
+.footer {
+    background-color: white;
+    color: black;
+    width: 100%;
+    font-family: 'EBGaramond',sans-serif;
+    font-size: 16px;
+    padding: 20px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top: 1px solid #e7e7e7;
+}
+
+.footer .footer-right {
+    float: right;
+    margin-left: auto;
+}
+
+.footer .footer-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+}
+
+.footer .footer-right .icon {
+    padding-right: 3px;
+    padding-left:  3px;
+    color: black;
+}
+
+.footer p.footer-links {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 0px;
+    padding: 0;
+    color: black;
+}
+
+.footer p {
+    font-size: 10px;
+    margin-top: 3px;
+    color: black;
+    margin-bottom: 0px;
+}
