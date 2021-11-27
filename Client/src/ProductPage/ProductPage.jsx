@@ -175,7 +175,8 @@ const ProductPage = (props) => {
                 <NavBar toggleDisplayCart = {toggleDisplayCart}
                         toggleLoginNavBarView = {props.toggleLoginNavBarView}
                         setProductTypeSelection = {props.setProductTypeSelection}
-                        userPet = {props.userPet}/>
+                        userPet = {props.userPet}
+                />
 
                 <div className="productListing">
                     <h1 className='productListingTitle'>{title}</h1>

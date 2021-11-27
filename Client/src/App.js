@@ -7,7 +7,8 @@ import ProductPage from "./ProductPage/ProductPage";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import LoginPage from "./LoginPage/LoginPage";
 import {gql, useMutation, useQuery} from "@apollo/client";
-
+import CartPage from "./CartPage/CartPage"
+import CheckoutPage from "./CartPage/CheckoutPage";
 
 //Queries statement
 const verifyAccessToken = gql` 
@@ -62,6 +63,13 @@ const App = () =>  {
     })
     const [userPets , setUserPets] = useState([])
     const [productChoices , setProductChoices] = useState([0 , "", ""])
+
+    const [checkOutPrice , setCheckOutPrice] = useState(0)
+
+
+    const setFinalCheckOutPrice = (amount) => {
+        setCheckOutPrice(amount)
+    }
 
     const setProductTypeSelection = (selection) => {
         //selection input : [ 0 , "species" , "health Concern"]
@@ -119,7 +127,10 @@ const App = () =>  {
         }catch {
             // If there is no access token in browser, catch error.
         }
-        localStorage.setItem('petMartCart' , '[]')
+        console.log("reset")
+        if  (!localStorage.getItem('petMartCart')) {
+            localStorage.setItem('petMartCart' , '[]')
+        }
     } , [userPets])
 
     //Routes to different sites
@@ -163,6 +174,29 @@ const App = () =>  {
                     userPet = {userPets}
                     setProductTypeSelection = {setProductTypeSelection}
                     productChoices = {productChoices}/>)}/>
+
+                <Route path = "/CartPage" component = {() => (<CartPage
+                    toggleDisplayCart = {toggleDisplayCart}
+                    toggleLoginNavBarView = {toggleLoginNavBarView}
+                    userDetails = {userDetails}
+                    userPet = {userPets}
+                    setProductTypeSelection = {setProductTypeSelection}
+                    setFinalCheckOutPrice = {setFinalCheckOutPrice}/>)}
+
+                />)}/>
+
+                <Route path = "/CheckoutPage" component = {() => (<CheckoutPage
+                    toggleDisplayCart = {toggleDisplayCart}
+                    toggleLoginNavBarView = {toggleLoginNavBarView}
+                    userDetails = {userDetails}
+                    userPet = {userPets}
+                    setProductTypeSelection = {setProductTypeSelection}
+                    checkOutPrice = {checkOutPrice}
+                    />)}
+                />)}/>
+
+
+
             </Switch>
       </BrowserRouter>
       )

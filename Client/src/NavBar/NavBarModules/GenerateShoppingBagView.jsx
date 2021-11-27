@@ -75,6 +75,9 @@ const GenerateShoppingBagView = (props) => {
                 }
             }
         }
+        else {
+            setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
+        }
     } ,[props.cartItems] )
 
 
