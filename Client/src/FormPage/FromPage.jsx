@@ -117,18 +117,21 @@ const FormPage = (props) => {
         setPetDetails(prevState => ({...prevState, [event.target.name]: event.target.value}));
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         //Check field input for pet registration
         //If success, register pet to database else show error message
         event.preventDefault()
         let validSubmit = checkFormInput(petDetails)
         if (validSubmit.first) {
-            let result = registerPet({
+            let result = await registerPet({
                 variables : petDetails
             })
+            props.refreshUserPets()
+            props.history.push("/profilePage")
         } else {
             alert(validSubmit.second)
         }
+
     }
 
     const submitAndReset = (event) => {
@@ -138,6 +141,8 @@ const FormPage = (props) => {
             let result = registerPet({
                 variables : petDetails
             })
+            props.refreshUserPets()
+            alert(petDetails.name + " successfully registered.")
         } else {
             alert(validSubmit.second)
         }
@@ -147,8 +152,8 @@ const FormPage = (props) => {
             gender: "Male",
             species: "Dog",
             petBreed: "GermanShepard",
-            age: "",
-            weight: "",
+            age: 0,
+            weight: 0.0,
             healthConcern: "No Health Concern",
             ownerEmail: props.userDetails.email
          })
@@ -161,7 +166,7 @@ const FormPage = (props) => {
             props.history.push("/")
         }
         else {
-            //set owner email
+            //set customer email
             setPetDetails(prevState => ({...prevState, ownerEmail: props.userDetails.email}));
         }
 

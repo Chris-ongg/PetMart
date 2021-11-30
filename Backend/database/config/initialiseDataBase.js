@@ -23,6 +23,18 @@ async function insertDummyCustomer(){
 
 }
 
+async function setupOrderIDTable() {
+    let startOrderID = {
+        name: "PetMart",
+        lastOrderID: 0
+    }
+
+    let temp = new database_schema.order_ID(startOrderID)
+    let result = await database_schema.order_ID.count()
+    if (result < 1) {
+        await temp.save()
+    }
+}
 
 async function warehouseSetup() {
     let tempArr = []
@@ -87,6 +99,6 @@ async function warehouseSetup() {
 
 insertDummyCustomer()
 warehouseSetup()
-
+setupOrderIDTable()
 
 

@@ -48,16 +48,30 @@ const typeDefs = gql`
         imagePath: String!
     }
     
+    type customerEmailAdd {
+        email: String!
+    }
+    
+    type pastOrders {
+        date: String!,
+        orderID: Int!,
+        store: String!,
+        items: Int!,
+        total: Int!,
+        trackingID: String!,
+        status: String!
+    }
+    
+    type encryptKey {
+        key: String!
+    }
+    
     input cartItemsInput {
         itemID: Int!,
         name: String!,
         price: Int!,
         quantity: Int!,
         imagePath: String!
-    }
-    
-    type dummytest {
-        email: String!
     }
     
     input customerCart {
@@ -109,13 +123,16 @@ const typeDefs = gql`
         getCustomerPets(customer: customerEmailInput!): [petDetails]
         searchWarehouse(search: searchInput): [productList]
         searchShoppingCart(cart: customerEmailInput): [cartItems]
+        customerPastOrders(customer: customerEmailInput): [pastOrders]
+        encryptionKey:encryptKey
     }
     
     type Mutation {
         customerLogout(logout: customerEmailInput): customerDetails
         customerRegistration(register: customerRegistrationInput!): customerDetails
         registerPet(newPet: newPetDetails): petDetails
-        saveShoppingCart(saveCart: customerCart): dummytest
+        saveShoppingCart(saveCart: customerCart): customerEmailAdd
+        saveCustomerOrder(saveOrder: customerCart): customerEmailAdd
     }
     
     

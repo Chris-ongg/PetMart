@@ -85,8 +85,10 @@ const ProductPage = (props) => {
     const addItemToCart = async (item , quantity_ , event) => {
         //get latest items in cart from localstorage
         //Add to cart and update localstorage. If user is log in then update database too.
-        setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
 
+        console.log(JSON.parse(localStorage.getItem('petMartCart')))
+        setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
+        let cart_Items = JSON.parse(localStorage.getItem('petMartCart'))
         let createItemShoppingBagProfile =  {
             itemID: item.itemID,
             name: item.name,
@@ -99,7 +101,7 @@ const ProductPage = (props) => {
         let flag = false;
 
         //increase item quantity in cart
-        let updatedCart = cartItems.map(function(cartItem , index) {
+        let updatedCart = cart_Items.map(function(cartItem , index) {
             let newCartItem = {...cartItem}
             if (cartItem.itemID === item.itemID) {
                 newCartItem.quantity = cartItem.quantity + createItemShoppingBagProfile.quantity
@@ -121,9 +123,9 @@ const ProductPage = (props) => {
                 }
             })
         }
-        else {
-            localStorage.setItem('petMartCart' , JSON.stringify(updatedCart))
-        }
+
+        localStorage.setItem('petMartCart' , JSON.stringify(updatedCart))
+
         setCartItems(updatedCart)
     }
 
@@ -168,7 +170,6 @@ const ProductPage = (props) => {
                     toggleDisplayCart = {toggleDisplayCart}
                     cartItems = {cartItems}
                 />
-
 
             <div className = "productPage">
 

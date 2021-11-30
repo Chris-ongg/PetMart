@@ -23,7 +23,7 @@ const LoggedInView = (props) => {
                 <button onClick = {() => {profilePage()}}>Account Summary</button>
             </div>
             <div className = "selection">
-                <button>Transaction</button>
+                <button onClick = {() => {profilePage()}}>Transaction</button>
             </div>
             <div className = "selection">
                 <button onClick = {() => {addPetsPage()}}>Register Pets</button>

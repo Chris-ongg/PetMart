@@ -1,4 +1,3 @@
-import user_Pets from "../../UserPets";
 import React from "react";
 import './ProductSelectionViewInNavBar.css'
 
@@ -47,10 +46,6 @@ const GenerateProductSelectionInNavBar = (props) =>{
 
                     <div className = "selection">
                         <button className = "titleButton" onClick={() => {props.setSelectedProduct([0 , "" , ""])}}>All Products</button>
-                    </div>
-
-                    <div className = "selection">
-                        <button className = "titleButton">Products On Sale</button>
                     </div>
 
                 </div>

@@ -68,7 +68,7 @@ const NavBar = (props) => {
             </div>
             <div className="right">
 
-                <IoPersonOutline size={iconSize} onClick = { ()=> {props.toggleLoginNavBarView()}}/>
+                <button><IoPersonOutline size={iconSize} onClick = { ()=> {props.toggleLoginNavBarView()}}/></button>
                 <button><BiShoppingBag className='icon' size={iconSize} onClick = { ()=> {props.toggleDisplayCart()}}/></button>
             </div>
 

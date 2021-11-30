@@ -8,12 +8,13 @@ class customerActivityHandler{
         return result
     }
 
-    async insertCustomer(email){
-
-    }
-
     async getShoppingCart(email){
         const result = await this.model.findOne({email: email})
+        return result
+    }
+
+    async getPastTransaction(email) {
+        const result = await this.model.findOne({email:email})
         return result
     }
 

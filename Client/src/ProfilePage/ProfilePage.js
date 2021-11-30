@@ -7,11 +7,25 @@ import GenerateShoppingBagView from "../NavBar/NavBarModules/GenerateShoppingBag
 import NavBar from "../NavBar/NavBar";
 import Footer from "../Footer/Footer"
 import './ProfilePage.css'
-import user_Transaction from '../Transaction';
+import {gql, useQuery} from "@apollo/client";
 
 //Table header
 const tableHeader = ["Name", "Gender", "Species", "PetBreed", "Age(Years)", "Weight(Kg) ", "Health Concern"]
 const tableTransactionHeader = ["Date", "OrderID", "Store", "Items", "Total", "Tracking ID", "Status"]
+
+const getTransactionRecords = gql`
+    query records($email: String!) {
+        customerPastOrders(customer: {email: $email}) {
+          date
+          orderID
+          store
+          items
+          total
+          trackingID
+          status       
+        } 
+    }`;
+
 
 function GenerateTable(props) {
     //Create table header
@@ -25,6 +39,7 @@ function GenerateTable(props) {
         </thead>
 
     //Populate table
+
     let tableBodies =
         <tbody>
         {props.tableContent.map(function (content, outerIndex) {
@@ -66,12 +81,12 @@ function GenerateUserPetsTable(props) {
 
 }
 
-function GenerateTransactionTable() {
+function GenerateTransactionTable(props) {
     //Create transaction table
     return (
         <div className="tableSection">
             <h3>Transactions</h3>
-            <GenerateTable tableHeader={tableTransactionHeader} tableContent={user_Transaction}/>
+            <GenerateTable tableHeader={tableTransactionHeader} tableContent={props.userTransactionRecords}/>
         </div>
     )
 
@@ -79,7 +94,16 @@ function GenerateTransactionTable() {
 
 const ProfilePage = (props) => {
 
+    const transactionRecords= useQuery(getTransactionRecords , {
+        variables: {
+            email: ""
+        },
+        fetchPolicy: "network-only",
+        nextFetchPolicy: "network-only"
+    })
+
     const [shoppingCartDisplay , setShoppingCartDisplay] = useState(false)
+    const [xactRecords, setXactRecords] = useState([])
 
     const toggleDisplayCart = () => {
         setShoppingCartDisplay(!shoppingCartDisplay)
@@ -90,11 +114,17 @@ const ProfilePage = (props) => {
         props.history.push("/formPage")
     }
 
-    useEffect(() => {
+    useEffect(async () => {
+
         //if user is not log in, redirect to home page
         if (Object.is(props.userDetails.name, "")){
             props.history.push("/")
         }
+        let result = await transactionRecords.refetch({email: props.userDetails.email})
+        if (result) {
+            setXactRecords(result.data.customerPastOrders)
+        }
+
         //update page whenever user details and pet changes
     } , [props.userDetails , props.userPet])
 
@@ -124,7 +154,7 @@ const ProfilePage = (props) => {
             </div>
 
             <GenerateUserPetsTable userPet = {props.userPet} goToFormPage = {goToFormPage}/>
-            <GenerateTransactionTable/>
+            <GenerateTransactionTable userTransactionRecords = {xactRecords}/>
             <Footer/>
         </div>
         </React.Fragment>

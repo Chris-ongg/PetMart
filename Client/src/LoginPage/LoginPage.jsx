@@ -4,10 +4,10 @@ import React, {useEffect, useState} from "react";
 import './LoginPage.css'
 import CryptoJS from "crypto-js/crypto-js";
 import {gql, useMutation, useQuery} from "@apollo/client";
-
 import LoggedInView from "./LoggedInView";
 import RegistrationView from "./RegistrationView";
 import LoginView from "./LoginView";
+import  {withRouter} from "react-router-dom"
 
 //Queries statement to database
 const emailLogin = gql` 
@@ -47,6 +47,14 @@ const registerUser = gql`
         }
     }`;
 
+const getkey = gql` 
+    query get_key {
+        encryptionKey 
+        {
+            key
+        }
+    }`
+
 const LoginPage = (props) => {
 
     const authenticatedEmailUser = useQuery(emailLogin , {
@@ -65,6 +73,13 @@ const LoginPage = (props) => {
         fetchPolicy: "network-only",
         nextFetchPolicy: "network-only"
     });
+
+
+    const encryptionKey = useQuery(getkey , {
+        fetchPolicy: "network-only",
+        nextFetchPolicy: "network-only"
+    });
+
 
     const [handleCustomerLogout] = useMutation(logoutUser);
 
@@ -100,7 +115,9 @@ const LoginPage = (props) => {
             }
         })
         props.setLoggedOutUserDetails()
+        localStorage.setItem('petMartCart' , '[]')
         setLoginStatus()
+        props.history.push("/")
     }
 
     const responseGoogle = async (response) => {
@@ -141,8 +158,9 @@ const LoginPage = (props) => {
             props.setErrorMessage("Invalid password")
         }
         else {
+            let encryptKey = await encryptionKey.refetch()
             //Encrypt password
-            let ciphertext = CryptoJS.AES.encrypt(loginFields.password, 'secret key 123').toString();
+            let ciphertext = CryptoJS.AES.encrypt(loginFields.password, encryptKey.data.encryptionKey.key).toString();
             //Send encrypted password to server to verify user
             let result = await authenticatedEmailUser.refetch({email: loginFields.emailAdd, password: ciphertext})
             //If password is correct, log in user else show error message
@@ -189,7 +207,8 @@ const LoginPage = (props) => {
         }
         //if check successfully, register new user to database
         if (flag) {
-            let ciphertext = CryptoJS.AES.encrypt(registrationFields.password, 'secret key 123').toString();
+            let encryptKey = await encryptionKey.refetch()
+            let ciphertext = CryptoJS.AES.encrypt(registrationFields.password, encryptKey.data.encryptionKey.key).toString();
             let result = await handleNewUser({
                 variables: {
                     name: registrationFields.name,
@@ -213,9 +232,9 @@ const LoginPage = (props) => {
     }
 
     useEffect(() => {
-        console.log(props.userDetails)
 
         if (!Object.is(props.userDetails.name, "")){
+            //set log in status if there is a logged in user
             setLoggedIn(true)
         }
         else {
@@ -263,4 +282,4 @@ const LoginPage = (props) => {
     )
 }
 
-export default LoginPage
+export default withRouter(LoginPage)

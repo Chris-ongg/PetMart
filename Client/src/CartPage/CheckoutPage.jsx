@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import NavBar from '../Homepage/NavBar'
+import NavBar from '../NavBar/NavBar'
 import Footer from '../Homepage/Footer'
 import styled from "styled-components";
 import Form from 'react-bootstrap/Form'
@@ -7,9 +7,10 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import {Countries} from './Countries'
-import {gql, useQuery} from "@apollo/client";
+import {gql, useMutation, useQuery} from "@apollo/client";
 import {withRouter} from "react-router-dom"
 
+//CSS styling for checkout page
 const Container = styled.div``;
 
 const Details = styled.div`
@@ -87,6 +88,22 @@ const getShoppingCart = gql`
         } 
     }`;
 
+const saveOrder = gql`
+    mutation SaveOrders (
+            $email: String!,
+            $emptyCart: Boolean!,
+            $cart: [cartItemsInput]!
+     ){
+    saveCustomerOrder(saveOrder: {
+        email: $email,
+        emptyCart: $emptyCart,
+        cart: $cart
+    }) 
+    {
+    email
+    }
+    }`;
+
 function checkFormInput(Fulladdress) {
 
     let info = JSON.parse(JSON.stringify(Fulladdress));
@@ -124,12 +141,10 @@ function checkFormInput(Fulladdress) {
     }
 }
 
-
 function GenerateSelectValue(props) {
     let generateValue = props.content.map(function (value_) {
         return (<option value={value_}> {value_}</option>)
     })
-
     return generateValue
 }
 
@@ -145,8 +160,11 @@ const Checkout = (props) => {
             city: ""
         }
     )
-
+    const [save_Order] = useMutation(saveOrder)
     const [cartItems, setCartItems] = useState([])
+    const [shoppingCartDisplay, setShoppingCartDisplay] = useState(false)
+    const [formSubmitted , setFormSubmitted] = useState(false)
+
 
     const shoppingCart = useQuery(getShoppingCart, {
         variables: {
@@ -160,12 +178,17 @@ const Checkout = (props) => {
         setRegistrationAddress(prevState => ({...prevState, [event.target.name]: event.target.value}));
     }
 
-    const handleSubmit = (event) => {
+    const toggleDisplayCart = () => {
+        setShoppingCartDisplay(!shoppingCartDisplay)
+    }
+
+    const handleSubmit = async (event) => {
+        //Check user address input in form are correct
         event.preventDefault()
-        console.log(this.state)
-        let validSubmit = checkFormInput(this.state)
+        let validSubmit = checkFormInput(registrationAddress)
         if (validSubmit.first) {
             alert("Address Successfully Confirmed!")
+            setFormSubmitted(true)
         } else {
             alert(validSubmit.second)
         }
@@ -179,9 +202,27 @@ const Checkout = (props) => {
         return bill
     }
 
+    const purchase = async (event) => {
+        //Process user payment
+        //Save user transaction to database
+        event.preventDefault();
+        if (props.userDetails.email != "") {
+            let saveResult = await save_Order({
+                variables: {
+                    email: props.userDetails.email,
+                    emptyCart: false,
+                    cart: cartItems
+                }
+            })
+        }
+        alert("Purchased confirmed. Cash-on-delivery.")
+        localStorage.setItem('petMartCart' , '[]')
+        window.location.href = '/';
+    }
+
     useEffect(async () => {
 
-        let itemsInCart = []
+        let itemsInCart = JSON.parse(localStorage.getItem('petMartCart'))
 
         let cartResult = null;
 
@@ -189,29 +230,29 @@ const Checkout = (props) => {
             cartResult = await shoppingCart.refetch({email: props.userDetails.email})
             if (cartResult) {
                 if (cartResult.data.searchShoppingCart) {
-                    console.log(cartResult)
                     itemsInCart = cartResult.data.searchShoppingCart
-                } else {
-                    itemsInCart = JSON.parse(localStorage.getItem('petMartCart'))
                 }
             }
-        } else {
-            itemsInCart = JSON.parse(localStorage.getItem('petMartCart'))
         }
 
-        if (!itemsInCart.length && !cartResult) {
-            //props.history.push("/")
+        console.log(itemsInCart)
+        if (!itemsInCart.length) {
+            props.history.push("/")
         } else {
             setCartItems(itemsInCart)
         }
 
     }, [])
-
+    //Generate checkout page form look
     return (
         <Container>
-            <Cartnav>
-                <NavBar/>
-            </Cartnav>
+
+                <NavBar
+                    toggleDisplayCart={toggleDisplayCart}
+                    toggleLoginNavBarView={props.toggleLoginNavBarView}
+                    setProductTypeSelection={props.setProductTypeSelection}
+                    userPet={props.userPet}/>
+
             <Title>CHECKOUT</Title>
             <Wrapper>
                 <Details>
@@ -292,12 +333,15 @@ const Checkout = (props) => {
                         <SummaryItemText>Total</SummaryItemText>
                         <SummaryItemPrice>{"$" + calculateBill()}</SummaryItemPrice>
                     </SummaryItem>
-                    <PurchaseButton type="submit"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        alert("Order Successfully Placed!")
-                                        window.location.href = '/';
-                                    }}>PURCHASE</PurchaseButton>
+                    {
+                        formSubmitted? <PurchaseButton type="submit"
+                                                       onClick={(event) => {
+                                                           purchase(event)
+                                                       }}>PURCHASE</PurchaseButton> :
+                            <SummaryItemText>Please confirm shipping address before purchase</SummaryItemText>
+                    }
+
+
                 </Summary>
             </Wrapper>
             <Cartfoot>

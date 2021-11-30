@@ -23,7 +23,7 @@ function GenerateSelectionViewForPets(props){
                         {
                             props.userPets.map(function (item, index) {
                                 return (
-                                    <button>{item.name}</button>
+                                    <button onClick={() => {props.setSelectedProduct([1, item.species, item.healthConcern])}} >{item.name}</button>
                                 )
                             })
                         }
@@ -116,12 +116,13 @@ const GenerateProductSelectionView = (props) =>{
                         <GenerateSelectionViewForPets
                             toggleSelectionChoicesView = {props.toggleSelectionChoicesView}
                             selectionChoicesView = {props.selectionChoicesView}
-                            userPets = {props.userPets}/>:
+                            userPets = {props.userPets}
+                            setSelectedProduct = {props.setSelectedProduct}
+                        />:
                         null
                 }
-                <GenerateSelectionViewForProductTypes toggleSelectionChoicesView = {props.toggleSelectionChoicesView} selectionChoicesView = {props.selectionChoicesView}/>
+                <GenerateSelectionViewForProductTypes toggleSelectionChoicesView = {props.toggleSelectionChoicesView} selectionChoicesView = {props.selectionChoicesView} setSelectedProduct = {props.setSelectedProduct}/>
                 <GenerateSelectionViewForAllProducts setSelectedProduct = {props.setSelectedProduct}/>
-                <GenerateSelectionViewForProductsOnSale />
             </div>
         </CSSTransition>
     )

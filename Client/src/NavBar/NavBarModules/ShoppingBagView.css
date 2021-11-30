@@ -97,3 +97,13 @@
 .shoppingCart .cart-block-items img {
     width: 150px;
 }
+
+.shoppingCart .Checkout {
+    font-family: 'EB Garamond' , Serif;
+    color: white;
+    background-color: black;
+    border: none;
+    width: 70%;
+    padding: 15px 9px;
+    margin: 20px auto 20px auto;
+}

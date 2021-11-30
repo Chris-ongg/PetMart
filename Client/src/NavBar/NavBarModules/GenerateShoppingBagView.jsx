@@ -4,6 +4,7 @@ import React, {useEffect, useRef, useState} from "react";
 
 import './ShoppingBagView.css'
 import {gql, useMutation, useQuery} from "@apollo/client";
+import  {withRouter} from "react-router-dom"
 
 const saveCart = gql`
     mutation SaveCart (
@@ -35,7 +36,7 @@ const getShoppingCart = gql`
 const GenerateShoppingBagView = (props) => {
     let totalSum = 0;
     let itemsCartBlockDisplay;
-
+    const componentMounted = useRef(true);
 
     const shoppingCart = useQuery(getShoppingCart , {
         variables: {
@@ -51,6 +52,7 @@ const GenerateShoppingBagView = (props) => {
         let temp = cartItems.filter(function(item  ,index) {
             return item.name !== itemName
         })
+
         if (props.userDetails.email != "") {
             let saveResult = await saveCartItems({
                 variables: {
@@ -64,21 +66,30 @@ const GenerateShoppingBagView = (props) => {
         setCartItems(temp)
     }
 
+    const checkOutPage = () => {
+        props.history.push("/CartPage")
+    }
+
     useEffect(async () => {
-        if (props.userDetails.email != "") {
+
+        if (props.userDetails.email != "" && props.shoppingCartDisplay) {
+
             let cartResult = await shoppingCart.refetch({email: props.userDetails.email})
-            if (cartResult) {
-                if (cartResult.data.searchShoppingCart) {
-                    setCartItems(cartResult.data.searchShoppingCart)
-                } else {
-                    setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
+
+                if (cartResult) {
+                    if (cartResult.data.searchShoppingCart) {
+                        setCartItems(cartResult.data.searchShoppingCart)
+                    } else {
+                        setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
+                    }
                 }
-            }
+
         }
         else {
             setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
         }
-    } ,[props.cartItems] )
+
+    } ,[props.cartItems , props.shoppingCartDisplay] )
 
 
     cartItems.length ? itemsCartBlockDisplay = cartItems.map(function (item, index) {
@@ -114,7 +125,12 @@ const GenerateShoppingBagView = (props) => {
                 </div>
 
                 {itemsCartBlockDisplay}
-
+                {cartItems.length?
+                    <button className="Checkout" onClick={() => {
+                        checkOutPage()
+                    }}>CHECK OUT</button>:
+                    null
+                }
             </div>
 
         </CSSTransition>
@@ -122,4 +138,4 @@ const GenerateShoppingBagView = (props) => {
     )
 }
 
-export default GenerateShoppingBagView
+export default withRouter(GenerateShoppingBagView)

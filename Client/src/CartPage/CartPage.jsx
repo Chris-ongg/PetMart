@@ -1,15 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import NavBar from '../NavBar/NavBar'
-import Footer from '../Footer/Footer'
-
-
+import Footer_ from '../Footer/Footer'
 import {Add, Remove} from "@material-ui/icons";
 import styled from "styled-components";
 import {withRouter} from "react-router-dom"
-
+import {gql, useMutation, useQuery} from "@apollo/client";
 import GenerateShoppingBagView from "../NavBar/NavBarModules/GenerateShoppingBagView";
-import {gql, useQuery} from "@apollo/client";
 
+//CSS styling for cart page
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -37,7 +35,6 @@ const TopButton = styled.button`
     props.type === "filled" ? "black" : "transparent"};
   color: ${(props) => props.type === "filled" && "white"};
 `;
-
 
 const Bottom = styled.div`
   display: flex;
@@ -163,8 +160,21 @@ const getShoppingCart = gql`
           imagePath       
         } 
     }`;
-
-
+const saveCart = gql`
+    mutation SaveCart (
+            $email: String!,
+            $emptyCart: Boolean!,
+            $cart: [cartItemsInput]!
+     ){
+    saveShoppingCart(saveCart: {
+        email: $email,
+        emptyCart: $emptyCart,
+        cart: $cart
+    }) 
+    {
+    email
+    }
+    }`;
 
 function DisplayProduct(props) {
     // accept an array of purchased items
@@ -207,8 +217,8 @@ const Cart = (props) => {
         fetchPolicy: "network-only",
         nextFetchPolicy: "network-only"
     })
-
     const [shoppingCartDisplay, setShoppingCartDisplay] = useState(false)
+    const [saveCartItems] = useMutation(saveCart)
 
     const [cartItems , setCartItems] = useState([])
 
@@ -217,6 +227,7 @@ const Cart = (props) => {
     }
 
     const calculateBill = () => {
+        //Calculate total bill in cart
         let bill = 0;
         cartItems.map(function(item , index) {
             bill += item.price * item.quantity
@@ -224,8 +235,8 @@ const Cart = (props) => {
         return bill
     }
 
-    const quantityAdd = (itemID_) => {
-
+    const quantityAdd = async (itemID_) => {
+        //Increment item quantity in cart
         let updatedCart = cartItems.map(function(cartItem , index) {
             let newCartItem = {...cartItem}
             if (cartItem.itemID === itemID_) {
@@ -234,10 +245,25 @@ const Cart = (props) => {
             }
             return cartItem
         })
+
+        //save to database if user is log in
+        if (props.userDetails.email != "") {
+            let saveResult = await saveCartItems({
+                variables: {
+                    email: props.userDetails.email,
+                    emptyCart: updatedCart.length > 0 ? false : true,
+                    cart: updatedCart
+                }
+            })
+        }
+        else {
+            localStorage.setItem('petMartCart' , JSON.stringify(updatedCart))
+        }
         setCartItems(updatedCart)
     }
 
-    const quantityMinus = (itemID_) => {
+    const quantityMinus = async (itemID_) => {
+        //decrement item quantity in cart
         let removedItem = 0;
         let updatedCart = cartItems.map(function(cartItem , index) {
             let newCartItem = {...cartItem}
@@ -257,25 +283,45 @@ const Cart = (props) => {
             return item.itemID !== removedItem
         })
 
+        if (props.userDetails.email != "") {
+            let saveResult = await saveCartItems({
+                variables: {
+                    email: props.userDetails.email,
+                    emptyCart: updatedCart.length > 0 ? false : true,
+                    cart: updatedCart
+                }
+            })
+        }
+        else {
+            localStorage.setItem('petMartCart' , JSON.stringify(updatedCart))
+        }
+
         setCartItems(updatedCart)
     }
 
     useEffect(async () => {
+
+        let itemsInCart = JSON.parse(localStorage.getItem('petMartCart'))
         if (props.userDetails.email != "") {
             let cartResult = await shoppingCart.refetch({email: props.userDetails.email})
             if (cartResult) {
                 if (cartResult.data.searchShoppingCart) {
-                    setCartItems(cartResult.data.searchShoppingCart)
-                } else {
-                    setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
+                    itemsInCart = setCartItems(cartResult.data.searchShoppingCart)
                 }
             }
         }
-        else {
-            setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
+        try {
+            if (!itemsInCart.length) {
+                props.history.push("/")
+            } else {
+                setCartItems(itemsInCart)
+            }
         }
-
+        catch {
+            //catch any error
+        }
         return () => {
+            //set total price in cart to parent state before component unmount/move to check out page
             props.setFinalCheckOutPrice(calculateBill())
         }
 
@@ -302,16 +348,11 @@ const Cart = (props) => {
             <Wrapper>
                 <Top>
                     <Title>YOUR CART</Title>
-                    <TopButton type="filled" onClick={(e) => {
-                        e.preventDefault();
-                        window.location.href = '/product';
-                    }}>CONTINUE SHOPPING</TopButton>
                 </Top>
                 <Bottom>
                     <Info>
 
                         <DisplayProduct itemsArr = {cartItems} quantityAdd = {quantityAdd} quantityMinus = {quantityMinus}/>
-
 
                     </Info>
                     <Summary>
@@ -340,7 +381,7 @@ const Cart = (props) => {
                 </Bottom>
             </Wrapper>
             <Cartfoot>
-                <Footer/>
+                <Footer_/>
             </Cartfoot>
         </Container>
     );

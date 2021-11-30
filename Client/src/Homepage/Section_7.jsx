@@ -5,6 +5,10 @@ import './Section_7.css'
 
 const ContactUs = (props) => {
 
+    const handleSubmit = () => {
+        alert("Your concern has been received. Thank you for your feedback!")
+    }
+
     let form = <Form>
         <h3>Share your concern with us below</h3>
         <Form.Group className="mb-3" controlId="controlInput_Name">
@@ -19,7 +23,7 @@ const ContactUs = (props) => {
             <Form.Label>Feedback</Form.Label>
             <Form.Control as="textarea" rows={3}/>
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button variant="primary" onClick={() => {handleSubmit()}}>
             Submit
         </Button>
     </Form>

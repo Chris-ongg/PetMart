@@ -13,6 +13,7 @@ const RegistrationView = (props) => {
         }
     } , [])
 
+    //Generate customer registration form
     return (
         <div className = "innerContainer">
             {

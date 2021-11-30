@@ -4,28 +4,23 @@ const CoreValuesSpeech = [
 
     {
         coreValues: "Experience",
-        writeUp: "Aenean tellus odio, consequat et congue nec, auctor at massa. Morbi mollis purus sapien, id dapibus nunc luctus et . " +
-                  "Nulla nec consequat elit, quis vehicula tortor. Nullam dictum eros lacus. " 
+        writeUp: "We listen to our customers, seek ways to meet their needs, and make them smile every time. " 
 
     }, 
 
     {
         coreValues: "Personalised",
-        writeUp: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae turpis vel nisl semper auctor. " + 
-                 "Etiam dictum massa ut posuere elementum. Etiam nec nisi laoreet, aliquam purus eu, faucibus tortor." + 
-                 "Maecenas tincidunt ante turpis, in congue libero mollis non."
+        writeUp: " Our deep understanding of the needs of cats and dogs is what makes it possible for us to make the world's most precise pet health nutrition. "      
     },
 
     {
-        coreValues: "Natural",
-        writeUp: "Nunc vehicula iaculis lectus, id dignissim tortor maximus ut. Phasellus ante ante, sagittis ac ipsum sagittis, dapibus tristique est." + 
-                 "Mauris vulputate nisi leo. Nulla facilisi."
+        coreValues: "Sustainability",
+        writeUp: "Our approach to sustainability ensures we show pets, people and the planet the respect they deserve."
     },
 
     {
         coreValues: "Honesty",
-        writeUp: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sollicitudin arcu et placerat tempus." + 
-                 "Nam faucibus vitae sem maximus sagittis. Integer semper eget lacus quis bibendum. In dictum sollicitudin congue"
+        writeUp: "Your trust and confidence matter to us! PET'SMART acts with absolute honesty, integrity, and fairness while maintaining the highest standards in our dealings with employees, customers and suppliers."
     }
 
 

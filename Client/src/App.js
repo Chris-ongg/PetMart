@@ -66,7 +66,6 @@ const App = () =>  {
 
     const [checkOutPrice , setCheckOutPrice] = useState(0)
 
-
     const setFinalCheckOutPrice = (amount) => {
         setCheckOutPrice(amount)
     }
@@ -74,11 +73,16 @@ const App = () =>  {
     const setProductTypeSelection = (selection) => {
         //selection input : [ 0 , "species" , "health Concern"]
         //0 = all products , 1 = select products from species with the following healthConcern
+
         setProductChoices(selection)
     }
 
+    const refreshUserPets = async () => {
+        let customer_Pets = await customerPets.refetch({email: userDetails.email})
+        setUserPets(customer_Pets.data.getCustomerPets)
+    }
+
     const setLoggedInUserDetails = async (details) => {
-        //detail input: email
         //Set logged in user name, email and registered pets
         setUserDetails(details)
         //fetch user pets from database
@@ -110,6 +114,8 @@ const App = () =>  {
         setErrorMsg(msg)
     }
 
+
+
     useEffect(async () => {
 
         try {
@@ -127,10 +133,12 @@ const App = () =>  {
         }catch {
             // If there is no access token in browser, catch error.
         }
-        console.log("reset")
+
+        //set petMartCart in localstorage if not present
         if  (!localStorage.getItem('petMartCart')) {
             localStorage.setItem('petMartCart' , '[]')
         }
+
     } , [userPets])
 
     //Routes to different sites
@@ -158,6 +166,7 @@ const App = () =>  {
                     toggleLoginNavBarView = {toggleLoginNavBarView}
                     userDetails = {userDetails}
                     userPet = {userPets}
+                    refreshUserPets = {refreshUserPets}
                     setProductTypeSelection = {setProductTypeSelection}/>)} />
 
                 <Route path = "/profilePage" component = {() => (<ProfilePage
@@ -205,14 +214,3 @@ const App = () =>  {
 
 export default App;
 
-
-//<Header />
-//<CoreValues />
-//<CallToAction />
-//<Carousel />
-//<Memories />
-//<Blog />
-//<ContactUs />
-
-//<Login />
-//<Signup />
