@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Container} from "react-bootstrap";
-import {memo} from "react";
-import {gql, useMutation, useQuery} from "@apollo/client";
+import {gql, useLazyQuery, useMutation, useQuery} from "@apollo/client";
 import GenerateShoppingBagView from "../NavBar/NavBarModules/GenerateShoppingBagView";
 import GenerateProductCard from "./ProductPageModules/GenerateProductCard";
 import NavBar from "../NavBar/NavBar";
@@ -54,21 +53,28 @@ const saveCart = gql`
 
 const ProductPage = (props) => {
 
-    const shoppingCart = useQuery(getShoppingCart , {
-        variables: {
-            email: ""
-        },
+    const [shoppingCart, ] = useLazyQuery(getShoppingCart , {
         fetchPolicy: "network-only",
-        nextFetchPolicy: "network-only"
+        nextFetchPolicy: "network-only",
+        onCompleted: async cartResult => {
+            try{
+                if (cartResult) {
+                    if (cartResult.searchShoppingCart) {
+                        setCartItems(cartResult.searchShoppingCart)
+                    }
+                }
+            } catch {}
+        }
     })
-    const queryProducts = useQuery(getProducts ,{
-        variables: {
-            searchType: 0,
-            species: "",
-            healthConcern: ""
-        },
+
+    const [queryProducts, ] = useLazyQuery(getProducts ,{
         fetchPolicy: "network-only",
-        nextFetchPolicy: "network-only"
+        nextFetchPolicy: "network-only",
+        onCompleted: async result => {
+            try{
+                setDisplayProducts(result.searchWarehouse)
+            } catch {}
+        }
     })
     const [saveCartItems] = useMutation(saveCart)
 
@@ -86,7 +92,6 @@ const ProductPage = (props) => {
         //get latest items in cart from localstorage
         //Add to cart and update localstorage. If user is log in then update database too.
 
-        console.log(JSON.parse(localStorage.getItem('petMartCart')))
         setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
         let cart_Items = JSON.parse(localStorage.getItem('petMartCart'))
         let createItemShoppingBagProfile =  {
@@ -132,32 +137,24 @@ const ProductPage = (props) => {
     useEffect(async () => {
         //Once component mounts, load customer product category choice
         //If no choice is made, then show all products instead
+        setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
         try {
-            let result = await queryProducts.refetch({
+            await queryProducts({variables:{
                 searchType: props.productChoices[0],
                 species: props.productChoices[1],
                 healthConcern: props.productChoices[2]
-            })
-            setDisplayProducts(result.data.searchWarehouse)
+            }})
         }
         catch {
-            let result = await queryProducts.refetch({
+            await queryProducts.refetch({variables: {
                 searchType: 0,
                 species: "",
                 healthConcern: ""
-            })
-            setDisplayProducts(result.data.searchWarehouse)
+            }})
         }
         //if user is logged in, retrieve latest shopping cart from database (if any)
         if (props.userDetails.email != "") {
-            let cartResult = await shoppingCart.refetch({email: props.userDetails.email})
-            if (cartResult) {
-                if (cartResult.data.searchShoppingCart) {
-                    setCartItems(cartResult.data.searchShoppingCart)
-                } else {
-                    setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
-                }
-            }
+            await shoppingCart({variables:{email: props.userDetails.email}})
         }
     } , [props.userDetails])
 
@@ -198,4 +195,4 @@ const ProductPage = (props) => {
 
 
 
-export default memo(ProductPage)
+export default ProductPage

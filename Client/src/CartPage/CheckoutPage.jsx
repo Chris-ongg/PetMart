@@ -235,7 +235,6 @@ const Checkout = (props) => {
             }
         }
 
-        console.log(itemsInCart)
         if (!itemsInCart.length) {
             props.history.push("/")
         } else {

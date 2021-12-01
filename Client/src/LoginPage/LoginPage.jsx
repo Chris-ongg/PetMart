@@ -3,7 +3,7 @@ import {ImCross, RiErrorWarningLine} from "react-icons/all";
 import React, {useEffect, useState} from "react";
 import './LoginPage.css'
 import CryptoJS from "crypto-js/crypto-js";
-import {gql, useMutation, useQuery} from "@apollo/client";
+import {gql, useLazyQuery, useMutation, useQuery} from "@apollo/client";
 import LoggedInView from "./LoggedInView";
 import RegistrationView from "./RegistrationView";
 import LoginView from "./LoginView";
@@ -57,27 +57,50 @@ const getkey = gql`
 
 const LoginPage = (props) => {
 
-    const authenticatedEmailUser = useQuery(emailLogin , {
-        variables: {
-            email: "",
-            password: ""
-        },
+    const [authenticatedEmailUser, ] = useLazyQuery(emailLogin , {
         fetchPolicy: "network-only",
-        nextFetchPolicy: "network-only"
+        nextFetchPolicy: "network-only",
+        onCompleted: async result => {
+            try{
+                if (result.customerEmailLogin.accessToken != "") {
+                    props.setErrorMessage("")
+                    setLoggedIn(true)
+                    props.setLoggedInUserDetails({
+                        name: result.customerEmailLogin.name,
+                        email: result.customerEmailLogin.email
+                    })
+                }
+                else {
+                    props.setErrorMessage("Wrong Email or Password")
+                }
+            } catch {}
+        }
     })
 
-    const authenticatedGoogleUser = useQuery(googleLogin , {
-        variables:{
-            token:""
-        },
+    const [authenticatedGoogleUser, ] = useLazyQuery(googleLogin , {
         fetchPolicy: "network-only",
-        nextFetchPolicy: "network-only"
+        nextFetchPolicy: "network-only",
+        onCompleted: async result => {
+            try{
+                if (result && result.customerGoogleLogin.accessToken != "") {
+                    props.setErrorMessage("")
+                    setLoggedIn(true)
+                    props.setLoggedInUserDetails({
+                        name: result.customerGoogleLogin.name,
+                        email: result.customerGoogleLogin.email
+                    })
+                }
+                else {
+                    props.setErrorMessage("Google login unsuccessful. Please login in through your email.")
+                }
+            } catch {}
+        }
     });
 
 
     const encryptionKey = useQuery(getkey , {
         fetchPolicy: "network-only",
-        nextFetchPolicy: "network-only"
+        nextFetchPolicy: "network-only",
     });
 
 
@@ -103,6 +126,7 @@ const LoginPage = (props) => {
         password2: ""
     })
 
+
     const setSuccessMessage= (msg) =>{
         setSuccessMsg(msg)
         props.setErrorMessage("")
@@ -122,18 +146,8 @@ const LoginPage = (props) => {
 
     const responseGoogle = async (response) => {
         //authenticated user through google login
-        let result  = await authenticatedGoogleUser.refetch({token: response.tokenId})
-        if (result.data && result.data.customerGoogleLogin.accessToken != "") {
-            props.setErrorMessage("")
-            setLoggedIn(true)
-            props.setLoggedInUserDetails({
-                name: result.data.customerGoogleLogin.name,
-                email: result.data.customerGoogleLogin.email
-            })
-        }
-        else {
-            props.setErrorMessage("Google login unsuccessful. Please login in through your email.")
-        }
+        await authenticatedGoogleUser({variables:{token: response.tokenId}})
+
     }
 
     const toggleLoginView = (state) => {
@@ -162,20 +176,8 @@ const LoginPage = (props) => {
             //Encrypt password
             let ciphertext = CryptoJS.AES.encrypt(loginFields.password, encryptKey.data.encryptionKey.key).toString();
             //Send encrypted password to server to verify user
-            let result = await authenticatedEmailUser.refetch({email: loginFields.emailAdd, password: ciphertext})
+            await authenticatedEmailUser({variables:{email: loginFields.emailAdd, password: ciphertext}})
             //If password is correct, log in user else show error message
-            if (result.data.customerEmailLogin.accessToken != "") {
-                props.setErrorMessage("")
-                setLoggedIn(true)
-                props.setLoggedInUserDetails({
-                    name: result.data.customerEmailLogin.name,
-                    email: result.data.customerEmailLogin.email
-                })
-            }
-            else {
-                props.setErrorMessage("Wrong Email or Password")
-            }
-
         }
     }
 

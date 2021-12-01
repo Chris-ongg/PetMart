@@ -7,7 +7,7 @@ import GenerateShoppingBagView from "../NavBar/NavBarModules/GenerateShoppingBag
 import NavBar from "../NavBar/NavBar";
 import Footer from "../Footer/Footer"
 import './ProfilePage.css'
-import {gql, useQuery} from "@apollo/client";
+import {gql, useLazyQuery, useQuery} from "@apollo/client";
 
 //Table header
 const tableHeader = ["Name", "Gender", "Species", "PetBreed", "Age(Years)", "Weight(Kg) ", "Health Concern"]
@@ -94,12 +94,16 @@ function GenerateTransactionTable(props) {
 
 const ProfilePage = (props) => {
 
-    const transactionRecords= useQuery(getTransactionRecords , {
-        variables: {
-            email: ""
-        },
+    const [transactionRecords, ]= useLazyQuery(getTransactionRecords , {
         fetchPolicy: "network-only",
-        nextFetchPolicy: "network-only"
+        nextFetchPolicy: "network-only",
+        onCompleted: async result => {
+            try{
+                if (result) {
+                    setXactRecords(result.customerPastOrders)
+                }
+            } catch {}
+        }
     })
 
     const [shoppingCartDisplay , setShoppingCartDisplay] = useState(false)
@@ -120,11 +124,7 @@ const ProfilePage = (props) => {
         if (Object.is(props.userDetails.name, "")){
             props.history.push("/")
         }
-        let result = await transactionRecords.refetch({email: props.userDetails.email})
-        if (result) {
-            setXactRecords(result.data.customerPastOrders)
-        }
-
+        await transactionRecords({variables:{email: props.userDetails.email}})
         //update page whenever user details and pet changes
     } , [props.userDetails , props.userPet])
 
@@ -159,7 +159,6 @@ const ProfilePage = (props) => {
         </div>
         </React.Fragment>
     )
-
 }
 
 export default withRouter(ProfilePage);

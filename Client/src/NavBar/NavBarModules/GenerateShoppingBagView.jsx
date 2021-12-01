@@ -3,7 +3,7 @@ import {ImCross} from "react-icons/all";
 import React, {useEffect, useRef, useState} from "react";
 
 import './ShoppingBagView.css'
-import {gql, useMutation, useQuery} from "@apollo/client";
+import {gql, useLazyQuery, useMutation, useQuery} from "@apollo/client";
 import  {withRouter} from "react-router-dom"
 
 const saveCart = gql`
@@ -38,12 +38,18 @@ const GenerateShoppingBagView = (props) => {
     let itemsCartBlockDisplay;
     const componentMounted = useRef(true);
 
-    const shoppingCart = useQuery(getShoppingCart , {
-        variables: {
-            email: ""
-        },
+    const [shoppingCart, ] = useLazyQuery(getShoppingCart , {
         fetchPolicy: "network-only",
-        nextFetchPolicy: "network-only"
+        nextFetchPolicy: "network-only",
+        onCompleted: async cartResult => {
+            try{
+                if (cartResult) {
+                    if (cartResult.searchShoppingCart) {
+                        setCartItems(cartResult.searchShoppingCart)
+                    }
+                }
+            } catch {}
+        }
     })
     const [saveCartItems] = useMutation(saveCart)
     const [cartItems , setCartItems] = useState([])
@@ -71,23 +77,11 @@ const GenerateShoppingBagView = (props) => {
     }
 
     useEffect(async () => {
-
+        setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
         if (props.userDetails.email != "" && props.shoppingCartDisplay) {
-
-            let cartResult = await shoppingCart.refetch({email: props.userDetails.email})
-
-                if (cartResult) {
-                    if (cartResult.data.searchShoppingCart) {
-                        setCartItems(cartResult.data.searchShoppingCart)
-                    } else {
-                        setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
-                    }
-                }
-
+           await shoppingCart({variables:{email: props.userDetails.email}})
         }
-        else {
-            setCartItems(JSON.parse(localStorage.getItem('petMartCart')))
-        }
+
 
     } ,[props.cartItems , props.shoppingCartDisplay] )
 

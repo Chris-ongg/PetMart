@@ -6,7 +6,7 @@ import ProfilePage from "./ProfilePage/ProfilePage";
 import ProductPage from "./ProductPage/ProductPage";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import LoginPage from "./LoginPage/LoginPage";
-import {gql, useMutation, useQuery} from "@apollo/client";
+import {gql, useLazyQuery, useMutation, useQuery} from "@apollo/client";
 import CartPage from "./CartPage/CartPage"
 import CheckoutPage from "./CartPage/CheckoutPage";
 
@@ -35,20 +35,32 @@ const getCustPets = gql`
 
 const App = () =>  {
 
-    const tokenVerification = useQuery(verifyAccessToken , {
-        variables: {
-            token: ""
-        },
-        fetchPolicy: "network-only",
-        nextFetchPolicy: "network-only"
+    const [tokenVerification ,  {loading, error, data}] = useLazyQuery(verifyAccessToken , {
+        fetchPolicy: "no-cache",
+        nextFetchPolicy: "no-cache",
+        onCompleted: async tokenData => {
+        try{
+            console.log(tokenData.verifyAccessToken.name)
+            if (!Object.is(tokenData.verifyAccessToken.name, "")) {
+                await setLoggedInUserDetails({
+                    name: tokenData.verifyAccessToken.name,
+                    email: tokenData.verifyAccessToken.email
+                })
+            }
+        } catch {}
+        }
     })
 
-    const customerPets = useQuery(getCustPets , {
-        variables: {
-            email: ""
-        },
+    const [customerPets, ] = useLazyQuery(getCustPets , {
         fetchPolicy: "network-only",
-        nextFetchPolicy: "network-only"
+        nextFetchPolicy: "network-only",
+        onCompleted: async customer_Pets => {
+            try{
+                if (customer_Pets) {
+                    setUserPets(customer_Pets.getCustomerPets)
+                }
+            } catch {}
+        }
     })
 
     //Control the view for shopping bag, login, error Message
@@ -78,16 +90,15 @@ const App = () =>  {
     }
 
     const refreshUserPets = async () => {
-        let customer_Pets = await customerPets.refetch({email: userDetails.email})
-        setUserPets(customer_Pets.data.getCustomerPets)
+        await customerPets({variables: {email: userDetails.email}})
     }
 
     const setLoggedInUserDetails = async (details) => {
+        console.log(details)
         //Set logged in user name, email and registered pets
         setUserDetails(details)
         //fetch user pets from database
-        let customer_Pets = await customerPets.refetch({email: details.email})
-        setUserPets(customer_Pets.data.getCustomerPets)
+       await customerPets({variables: {email: details.email}})
     }
 
     const setLoggedOutUserDetails = () => {
@@ -119,16 +130,10 @@ const App = () =>  {
     useEffect(async () => {
 
         try {
+
             //If access token is stored in browser cookie then verify access token with database
             let token = document.cookie.split(";").find(row => row.startsWith(" PET_MART_USER")).split('=')[1]
-            let result = await tokenVerification.refetch({token: token})
-            //If access token is valid then log in user
-            if (!Object.is(result.data.verifyAccessToken.name , "")) {
-                await setLoggedInUserDetails({
-                    name: result.data.verifyAccessToken.name,
-                    email: result.data.verifyAccessToken.email
-                })
-            }
+            await tokenVerification({variables: {token: token}} )
 
         }catch {
             // If there is no access token in browser, catch error.
