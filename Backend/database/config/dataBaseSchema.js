@@ -78,9 +78,5 @@ const orderID = new mongoose.Schema({
 
 const order_ID = mongoose.model('order_ID' , orderID , 'order_ID')
 
-//Insert a dummy customer into deluxeRoom during first start up
-//const deluxeRoom_test = new waitList_handler(deluxeRoom);
-//module.exports = {Customer_: customer , DeluxeRoom_: deluxeRoom , PremierRoom_: premierRoom};
-
 module.exports = {custAcc : customerAcc , custPet: customerPets ,
     warehouse: warehouse , customerActivity: customerActivity, shoppingCart: shoppingCart , order_ID:order_ID , custXact: custXact}

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import Header from './Section_1';
 import CoreValues from './Section_2';
 import Blog from './Section_6';
@@ -31,14 +31,3 @@ const HomePage = (props) => {
 }
 
 export default HomePage
-
-
-//<Header userLogIn = {this.props.userLogIn} userLogOut= {this.props.userLogOut}/>
-//<CoreValues />
-//<CallToAction />
-//<Carousel />
-//<Memories />
-//<Blog />
-//<ContactUs />  
-//<Footer />
-//<FormPage />
