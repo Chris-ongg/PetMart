@@ -1,6 +1,27 @@
-# Semester Project IT5007 - PET's MART
+# PET's MART (MERN stack)
 
-Repo submission
+##Introduction
+This is a code repository for a personal fullstack project on ReactJS eCommerce web Pet Shop application.
+
+The project implement a complete sample pattern for a real-life eCommerce web application including user login/logout, registration, landing page design, account information and shopping cart and store checkout flow.
+
+###Landing Page
+![img.png](img.png)
+
+###Store design
+![img_1.png](img_1.png)
+
+###User Login/Logout & Registration
+![img_2.png](img_2.png)
+
+###Shopping Cart
+![img_3.png](img_3.png)
+
+##Built with
+- ReactJS - Used to implement webpage logic, visuals and animations
+- NodeJS - For server implementation at the backend
+- GraphQL - API
+- MongoDB - To store user information
 
 ## Prerequisite
 - Download and install npm  
